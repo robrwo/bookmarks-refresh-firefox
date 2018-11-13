@@ -1,0 +1,21 @@
+{
+
+    "manifest_version": 2,
+    "name": "Bookmark Thing",
+    "version": "0.1.0",
+
+    "description": "Validate your bookmarks",
+
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    },
+
+    "permissions": [
+        "bookmarks",
+        "activeTab",
+        "webRequest",
+        "<all_urls>"
+    ]
+}
