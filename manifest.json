@@ -4,7 +4,7 @@
     "name": "Bookmark Thing",
     "version": "0.1.0",
 
-    "description": "Validate your bookmarks",
+    "description": "Update your bookmarks",
 
     "background": {
         "scripts": [
@@ -16,6 +16,7 @@
         "bookmarks",
         "activeTab",
         "webRequest",
+        "notifications",
         "<all_urls>"
     ]
 }

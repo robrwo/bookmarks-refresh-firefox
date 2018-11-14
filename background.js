@@ -1,6 +1,80 @@
 
 function updateBookmark(info) {
+
     console.log(info);
+
+    var explanation;
+
+    switch (info.reason) {
+    case 'canonical':
+        explanation = 'the canonical link for this page is different.';
+        action = 'update';
+        break;
+    case 'moved':
+        explanation = 'the page has moved.';
+        action = 'update';
+        break;
+    case 'inacessible':
+        explanation = 'the page is inaccessible.';
+        action = 'remove';
+        break;
+    }
+
+    if (explanation === undefined) {
+        console.warn( `unhandled reason ${info.reason}` );
+        return;
+    }
+
+    var actor = function(info) {
+
+        return (notification_id) => {
+
+            return (id) => {
+
+                if (id == notification_id) {
+
+                    if (info.url) {
+
+                        var promise = browser.bookmarks.update( info.bookmark.id, { url: info.url } );
+                        promise.then( () => {
+                            console.log('updated bookmark');
+                        });
+
+
+                    }
+                    else {
+
+                        var promise = browser.bookmarks.remove( info.bookmark.id );
+                        promise.then( () => {
+                            console.log('removed bookmark');
+                        });
+
+                    }
+
+                    browser.notifications.clear(id);
+
+                }
+            }
+        };
+
+    }(info);
+
+    var notifying = browser.notifications.create(
+        {
+            "type": "basic",
+            "iconUrl": browser.extension.getURL("icons/link-48.png"),
+            "title": `Bookmark for ${info.bookmark.title}`,
+            "message": `There is a bookmark linking to the page ${info.bookmark.url}, but ${explanation}\n\nClick to ${action} the bookmark.`
+        }
+    );
+    notifying.then( (notification_id) => {
+
+        browser.notifications.onClicked.addListener(
+            actor(notification_id)
+        );
+
+    });
+
 }
 
 function responseHandler(res) {
@@ -91,7 +165,7 @@ function responseHandler(res) {
                 }
 
             }
-            else if ((code == 301) || (code == 308)) {
+            else if ((code == 301) || (code == 302) || (code == 308)) {
 
                 var moved = getHeader(isLocation);
 
