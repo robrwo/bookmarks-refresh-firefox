@@ -15,12 +15,12 @@ function updateBookmark(info) {
         action = 'update';
         break;
     case 'moved':
-        explanation = 'the page has moved.';
+        explanation = `the page has moved (${res.statusLine}).`;
         action = 'update';
         break;
     case 'inacessible':
-        explanation = 'the page is inaccessible.';
-        action = 'remove';
+        explanation = `the page is inaccessible (${res.statusLine}).`;
+        action = 'remove';11
         break;
     }
 
