@@ -117,6 +117,10 @@ function responseHandler(res) {
     var bookmarkPromise = browser.bookmarks.search({url: res.url});
     bookmarkPromise.then((bookmarks) => {
 
+        if (bookmarks.length == 0) {
+            return;
+        }
+
         var bookmark = bookmarks[0];
         if (bookmark) {
 
