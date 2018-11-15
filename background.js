@@ -33,21 +33,25 @@ function updateBookmark(info) {
 
                 if (id == notification_id) {
 
-                    if (info.url) {
+                    if (info.reason == 'inacessible') {
+
+                        var promise = browser.bookmarks.remove( info.bookmark.id );
+                        promise.then( () => {
+                            console.log('removed bookmark');
+                        });
+
+                    }
+                    else if (info.url) {
 
                         var promise = browser.bookmarks.update( info.bookmark.id, { url: info.url } );
                         promise.then( () => {
                             console.log('updated bookmark');
                         });
 
-
                     }
                     else {
 
-                        var promise = browser.bookmarks.remove( info.bookmark.id );
-                        promise.then( () => {
-                            console.log('removed bookmark');
-                        });
+                        console.warn( 'no url to update' );
 
                     }
 
