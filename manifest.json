@@ -1,7 +1,7 @@
 {
 
     "manifest_version": 2,
-    "name": "Refresh Your Bookmark",
+    "name": "Refresh Your Bookmarks",
     "version": "0.2.0",
     "description": "Update your bookmarks when pages have been moved or deleted",
 
