@@ -151,7 +151,7 @@ function responseHandler(res) {
                             canonical = message.canonical;
                             browser.runtime.onMessage.removeListener(getCanonical);
 
-                            if (canonical != res.url) {
+                            if (canonical && (canonical != res.url)) {
 
                                 updateBookmark({
                                     bookmark: bookmark,
