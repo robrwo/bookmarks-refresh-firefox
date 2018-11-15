@@ -1,8 +1,6 @@
 
 function updateBookmark(info) {
 
-    console.log(info);
-
     var explanation;
 
     switch (info.reason) {
