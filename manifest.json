@@ -1,10 +1,9 @@
 {
 
     "manifest_version": 2,
-    "name": "Bookmark Thing",
-    "version": "0.1.0",
-
-    "description": "Update your bookmarks",
+    "name": "Refresh Your Bookmark",
+    "version": "0.2.0",
+    "description": "Update your bookmarks when pages have been moved or deleted",
 
     "background": {
         "scripts": [
