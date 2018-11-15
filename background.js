@@ -18,7 +18,7 @@ function updateBookmark(info) {
         break;
     case 'inacessible':
         explanation = `the page is inaccessible (${res.statusLine}).`;
-        action = 'remove';11
+        action = 'remove';
         break;
     }
 
