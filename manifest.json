@@ -5,6 +5,10 @@
     "version": "0.2.0",
     "description": "Update your bookmarks when pages have been moved or deleted",
 
+    "icons": {
+        "48": "icons/link-48.png"
+    },
+
     "background": {
         "scripts": [
             "background.js"

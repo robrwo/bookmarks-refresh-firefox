@@ -173,6 +173,10 @@ function responseHandler(res) {
 
                 var moved = getHeader(isLocation);
 
+                // TODO: check if the only difference is https vs
+                // http. If so, add special reason for updating
+                // bookmarks.
+
                 updateBookmark({
                     bookmark: bookmark,
                     url: moved[0],
