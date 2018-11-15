@@ -10,6 +10,10 @@ function updateBookmark(info) {
         explanation = 'the canonical link for this page is different.';
         action = 'update';
         break;
+    case 'https':
+        explanation = 'the page has redirected to an HTTPS page.';
+        action = 'update';
+        break;
     case 'moved':
         explanation = 'the page has moved.';
         action = 'update';
@@ -171,17 +175,19 @@ function responseHandler(res) {
             }
             else if ((code == 301) || (code == 302) || (code == 308)) {
 
-                var moved = getHeader(isLocation);
+                var location = getHeader(isLocation);
+                var moved    = location[0].split('://');
+                var orig     = bookmark.url.split('://');
 
-                // TODO: check if the only difference is https vs
-                // http. If so, add special reason for updating
-                // bookmarks.
+                var reason = ((moved[1] == orig[1]) && (moved[0] == 'https'))
+                    ? 'https'
+                    : 'moved';
 
                 updateBookmark({
                     bookmark: bookmark,
-                    url: moved[0],
+                    url: location[0],
                     res: res,
-                    reason: 'moved'
+                    reason: reason
                 });
 
             }
