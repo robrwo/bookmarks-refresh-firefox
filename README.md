@@ -14,5 +14,8 @@ This add-on does the following when you visit a bookmarked page:
 - If the page has a canonical link that is different from your
   bookmark, it will suggest updating the bookmark.
 
+The suggested change is only acted upon when if you click on the
+notification.
+
 The bookmark can be installed from
 https://addons.mozilla.org/en-US/firefox/addon/refresh-your-bookmarks/
