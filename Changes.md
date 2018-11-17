@@ -3,7 +3,7 @@
 ## [0.2.1] - 2018-11-17
 
 ### Changed
-- Fixed white-on-transparent icon, #1.
+- Fixed white-on-transparent icon, [#1](https://github.com/robrwo/bookmarks-refresh-firefox/issues/1).
 
 ## [0.2.0] - 2018-11-15
 
