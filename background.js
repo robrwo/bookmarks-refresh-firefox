@@ -1,7 +1,10 @@
 
 function updateBookmark(info) {
 
-    var explanation;
+    let res = info.res;
+
+    let explanation;
+    let action;
 
     switch (info.reason) {
     case 'canonical':
@@ -65,6 +68,7 @@ function updateBookmark(info) {
 
     }(info);
 
+
     var notifying = browser.notifications.create(
         {
             "type": "basic",
@@ -83,11 +87,10 @@ function updateBookmark(info) {
 
 }
 
-function responseHandler(res) {
+function checkBookmark(res, info) {
 
-    if (res.tabId < 0) {
-        return;
-    }
+    let code     = res.statusCode;
+    let bookmark = info.bookmark;
 
     function getHeader(fn) {
         var index = res.responseHeaders.findIndex(fn);
@@ -112,25 +115,34 @@ function responseHandler(res) {
         return element.name.toLowerCase() == 'location';
     }
 
-    var bookmarkPromise = browser.bookmarks.search({url: res.url});
-    bookmarkPromise.then((bookmarks) => {
+    if (code == 200) {
 
-        if (bookmarks.length == 0) {
-            return;
+        var canonical = getHeader(isCanonicalLink);
+
+        if (canonical) {
+            canonical = canonical[0].substring(1,canonical.length-2);
+            if (canonical != res.url) {
+
+                updateBookmark({
+                    bookmark: bookmark,
+                    url: canonical,
+                    res: res,
+                    reason: 'canonical'
+                });
+
+            }
         }
+        else {
 
-        var bookmark = bookmarks[0];
-        if (bookmark) {
+            var type = getHeader(isContentType)[0];
 
-            var code = res.statusCode;
+            if (type == 'text/html') {
 
-            if (code == 200) {
+                function getCanonical(message, sender) {
+                    canonical = message.canonical;
+                    browser.runtime.onMessage.removeListener(getCanonical);
 
-                var canonical = getHeader(isCanonicalLink);
-
-                if (canonical) {
-                    canonical = canonical[0].substring(1,canonical.length-2);
-                    if (canonical != res.url) {
+                    if (canonical && (canonical != res.url)) {
 
                         updateBookmark({
                             bookmark: bookmark,
@@ -140,73 +152,99 @@ function responseHandler(res) {
                         });
 
                     }
-                }
-                else {
-
-                    var type = getHeader(isContentType)[0];
-
-                    if (type == 'text/html') {
-
-                        function getCanonical(message, sender) {
-                            canonical = message.canonical;
-                            browser.runtime.onMessage.removeListener(getCanonical);
-
-                            if (canonical && (canonical != res.url)) {
-
-                                updateBookmark({
-                                    bookmark: bookmark,
-                                    url: canonical,
-                                    res: res,
-                                    reason: 'canonical'
-                                });
-
-                            }
-
-                        }
-
-                        browser.runtime.onMessage.addListener(getCanonical);
-
-                        browser.tabs.executeScript({
-                            file: "canonical.js"
-                        });
-
-                    }
 
                 }
 
-            }
-            else if ((code == 301) || (code == 302) || (code == 308)) {
+                browser.runtime.onMessage.addListener(getCanonical);
 
-                var location = getHeader(isLocation);
-                var moved    = location[0].split('://');
-                var orig     = bookmark.url.split('://');
-
-                var reason = ((moved[1] == orig[1]) && (moved[0] == 'https'))
-                    ? 'https'
-                    : 'moved';
-
-                updateBookmark({
-                    bookmark: bookmark,
-                    url: location[0],
-                    res: res,
-                    reason: reason
+                browser.tabs.executeScript({
+                    file: "canonical.js"
                 });
-
-            }
-            else if ((code >= 400) || (code <= 499)) {
-
-                updateBookmark({
-                    bookmark: bookmark,
-                    url: null,
-                    res: res,
-                    reason: 'inacessible'
-                });
-
 
             }
 
         }
+
+    }
+    else if ((code >= 300) && (code <= 399)) {
+
+        var location = getHeader(isLocation);
+        var moved    = location[0].split('://');
+        var orig     = bookmark.url.split('://');
+
+        var reason = ((moved[1] == orig[1]) && (moved[0] == 'https'))
+            ? 'https'
+            : 'moved';
+
+        updateBookmark({
+            bookmark: bookmark,
+            url: location[0],
+            res: res,
+            reason: reason
+        });
+
+    }
+    else if ((code >= 400) || (code <= 499)) {
+
+        updateBookmark({
+            bookmark: bookmark,
+            url: null,
+            res: res,
+            reason: 'inacessible'
+        });
+
+
+    }
+
+}
+
+function getBookmark(res) {
+
+    let parts = res.url.split('://');
+
+    if (!parts[0].match( /^https?/ )) {
+        return null;
+    }
+
+    let schemes = [ 'http', 'https' ];
+    let info;
+
+    schemes.forEach( (scheme) => {
+
+        let url = scheme + '://' + parts[1];
+
+        if (info === undefined) {
+
+            var promise = browser.bookmarks.search({ url: url });
+            promise.then((bookmarks) => {
+
+                if (bookmarks.length) {
+
+                    info = {
+                        bookmark: bookmarks[0],
+                        same: scheme == parts[0],
+                        url: url
+                    };
+
+                    checkBookmark(res, info);
+
+                }
+
+            });
+
+        }
+
     });
+
+}
+
+function responseHandler(res) {
+
+    if (res.tabId < 0) {
+        return;
+    }
+
+    getBookmark( res );
 
 }
 

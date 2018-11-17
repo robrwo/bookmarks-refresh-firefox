@@ -1,5 +1,8 @@
 # Revision history for Refresh Your Bookmarks
 
+### Changes
+- Handle redirects to an https page that then returns gone, [#3](https://github.com/robrwo/bookmarks-refresh-firefox/issues/3)
+
 ## [0.2.1] - 2018-11-17
 
 ### Changed
