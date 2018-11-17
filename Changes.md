@@ -1,5 +1,8 @@
 # Revision history for Refresh Your Bookmarks
 
+### Changes
+- Adjust icon configuration.
+
 ## [0.4.0] - 2018-11-18
 
 ### Changes
