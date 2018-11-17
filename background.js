@@ -22,7 +22,9 @@ function updateBookmark(info) {
         action = 'update';
         break;
     case 'inacessible':
-        explanation = `the page is inaccessible (${res.statusLine}).`;
+        explanation = res.statusLine === undefined
+            ? `the host cannot be reached (${res.error})`
+            : `the page is inaccessible (${res.statusLine}).`;
         action = 'remove';
         break;
     }
@@ -117,7 +119,17 @@ function checkBookmark(res, info) {
         return element.name.toLowerCase() == 'location';
     }
 
-    if (code == 200) {
+    if (code === undefined) {
+
+        updateBookmark({
+            bookmark: bookmark,
+            url: null,
+            res: res,
+            reason: 'inacessible'
+        });
+
+    }
+    else if (code == 200) {
 
         var canonical = getHeader(isCanonicalLink);
 
@@ -250,15 +262,23 @@ function responseHandler(res) {
 
 }
 
+let filter = {
+    urls: [
+        "<all_urls>"
+    ],
+    types: [
+        "main_frame"
+    ]
+};
+
+
 browser.webRequest.onHeadersReceived.addListener(
     responseHandler,
-    {
-        urls: [
-            "<all_urls>"
-        ],
-        types: [
-            "main_frame"
-        ]
-    },
+    filter,
     [ "responseHeaders" ]
+);
+
+browser.webRequest.onErrorOccurred.addListener(
+    responseHandler,
+    filter
 );

@@ -1,5 +1,8 @@
 # Revision history for Refresh Your Bookmarks
 
+### Changes
+- Handle when a host cannot be reached.
+
 ## [0.3.0] - 2018-11-17
 
 ### Changes
