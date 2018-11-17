@@ -2,6 +2,7 @@
 function updateBookmark(info) {
 
     let res = info.res;
+    let code = res.statusCode;
 
     let explanation;
     let action;
@@ -16,7 +17,8 @@ function updateBookmark(info) {
         action = 'update';
         break;
     case 'moved':
-        explanation = `the page has moved (${res.statusLine}).`;
+        let duration = (code == 301) || (code == 308) ? 'permanently' : 'temporarily';
+        explanation = `the page has moved ${duration} (${res.statusLine}).`;
         action = 'update';
         break;
     case 'inacessible':

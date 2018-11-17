@@ -3,6 +3,7 @@
 ### Changes
 - Handle redirects to an https page that then returns gone, [#3](https://github.com/robrwo/bookmarks-refresh-firefox/issues/3)
 - Ignore HTTP 300 responses.
+- Indicate whether the bookmark has moved permanently or temporarily.
 
 ## [0.2.1] - 2018-11-17
 
