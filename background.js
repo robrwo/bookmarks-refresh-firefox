@@ -166,7 +166,7 @@ function checkBookmark(res, info) {
         }
 
     }
-    else if ((code >= 300) && (code <= 399)) {
+    else if ((code >= 301) && (code <= 399)) {
 
         var location = getHeader(isLocation);
         var moved    = location[0].split('://');
