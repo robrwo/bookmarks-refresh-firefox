@@ -76,7 +76,7 @@ function updateBookmark(info) {
     var notifying = browser.notifications.create(
         {
             "type": "basic",
-            "iconUrl": browser.extension.getURL("icons/link-48.png"),
+            "iconUrl": browser.extension.getURL("icons/link.svg"),
             "title": `Bookmark for ${info.bookmark.title}`,
             "message": `There is a bookmark linking to the page ${info.bookmark.url}, but ${explanation}\n\nClick to ${action} the bookmark.`
         }

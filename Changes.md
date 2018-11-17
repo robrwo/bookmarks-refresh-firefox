@@ -2,6 +2,7 @@
 
 ### Changes
 - Handle when a host cannot be reached.
+- Use SVG icon, [#1](https://github.com/robrwo/bookmarks-refresh-firefox/issues/1).
 
 ## [0.3.0] - 2018-11-17
 
