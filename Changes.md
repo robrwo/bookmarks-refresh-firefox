@@ -1,5 +1,7 @@
 # Revision history for Refresh Your Bookmarks
 
+## [0.2.1] - 2018-11-17
+
 ### Changed
 - Fixed white-on-transparent icon, #1.
 
