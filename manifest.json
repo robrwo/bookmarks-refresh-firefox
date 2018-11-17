@@ -2,7 +2,7 @@
 
     "manifest_version": 2,
     "name": "Refresh Your Bookmarks",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Update your bookmarks when pages have been moved or deleted",
     "author": "Robert Rothenberg",
     "homepage_url": "https://github.com/robrwo/bookmarks-refresh-firefox",
