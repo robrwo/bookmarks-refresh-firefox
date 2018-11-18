@@ -1,17 +1,18 @@
 # Revision history for Refresh Your Bookmarks
 
-### Changes
+### Changed
 - Adjust icon configuration.
+- Fixed inconsistent text in the Changes file.
 
 ## [0.4.0] - 2018-11-18
 
-### Changes
+### Changed
 - Handle when a host cannot be reached.
 - Use SVG icon, [#1](https://github.com/robrwo/bookmarks-refresh-firefox/issues/1).
 
 ## [0.3.0] - 2018-11-17
 
-### Changes
+### Changed
 - Handle redirects to an https page that then returns gone, [#3](https://github.com/robrwo/bookmarks-refresh-firefox/issues/3)
 - Ignore HTTP 300 responses.
 - Indicate whether the bookmark has moved permanently or temporarily.
